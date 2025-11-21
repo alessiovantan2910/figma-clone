@@ -1,5 +1,5 @@
 import { auth } from "~/server/auth";
-import { Room} from "~/app/components/liveblocks/Room";
+
 type ParamsType = Promise<{id: string}>;
 
 
@@ -9,10 +9,7 @@ export default async function Page({params} : {params: ParamsType}) {
     const session = await auth();
 
   return
-
-  <Room>
-
-  </Room>
   
-    
 }
+
+//11/12 room 作成　dashbooard config
