@@ -1,28 +1,40 @@
-import { Liveblocks } from "@liveblocks/node"
+import { Liveblocks } from "@liveblocks/node";
 import { env } from "~/env";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 
-
-const liveblocks = new Liveblocks({secret: env.LIVEBLOCKS_SECRET_KEY});
-
+const liveblocks = new Liveblocks({ secret: env.LIVEBLOCKS_SECRET_KEY });
 
 export async function POST(req: Request) {
-    const userSession = await auth();
 
-    const user = await db.user.findUniqueOrThrow({
-        where: {id: userSession?.user.id},
-    });
+  const userSession = await auth();
 
-    const session = liveblocks.prepareSession(user.id,{
-        userInfo: {
-            name: user.email ?? "Anonymous",
-        }
-    });
+  if (!userSession || !userSession.user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
-    session.allow(`room:${"test"}`, session.FULL_ACCESS);
 
-    const {status, body} = await session.authorize();
+  const { room } = await req.json();
 
-    return new Response(body, {status})
+
+  const user = await db.user.findUnique({
+    where: { id: userSession.user.id },
+  });
+
+  if (!user) {
+    return new Response("User not found", { status: 403 });
+  }
+
+
+  const session = liveblocks.prepareSession(user.id, {
+    userInfo: {
+      name: user.email ?? "Anonymous",
+    },
+  });
+
+
+  session.allow(room, session.FULL_ACCESS);
+
+  const { status, body } = await session.authorize();
+  return new Response(body, { status });
 }
