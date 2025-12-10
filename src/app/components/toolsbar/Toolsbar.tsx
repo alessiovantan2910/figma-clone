@@ -1,0 +1,22 @@
+import {  CanvasMode, type CanvasState } from "~/types";
+
+import SelectionButton from "./SelectionButton";
+
+
+export default function Toolsbar({
+    canvasState , setCanvasState
+} :{
+        canvasState: CanvasState; 
+        setCanvasState: (newState: CanvasState) => void;
+    }){
+    return (
+ <div className="fixed bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center justify-center rounded-2xl bg-white p-1 shadow-md">
+    <div className="flex justify-center items-center gap-3 "></div>
+        <SelectionButton 
+        isActive={canvasState.mode === CanvasMode.None} 
+        canvasMode={canvasState.mode} onClick={(canvasMode) => setCanvasState({mode: canvasMode})}  />
+ </div>
+    )
+   
+
+}

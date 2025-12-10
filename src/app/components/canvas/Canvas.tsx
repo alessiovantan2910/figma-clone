@@ -3,9 +3,10 @@ import { nanoid } from "nanoid"
 import { useMutation, useStorage } from "@liveblocks/react";
 import { pointerEventToCanvasPoint, rgbToHex } from "~/utils";
 import  LayerComponent  from "./LayerComponent";
-import { LayerType, type RectangleLayer, type Layer, type Point, type Camera } from "~/types";
+import { CanvasMode, LayerType, type RectangleLayer, type EllipseLayer, type Layer, type Point, type Camera, type CanvasState} from "~/types";
 import { LiveObject } from "@liveblocks/client";
 import { useEffect, useState } from "react";
+import Toolsbar from "../toolsbar/Toolsbar";
 
 
 const MAX_LAYERS = 100;
@@ -13,6 +14,7 @@ const MAX_LAYERS = 100;
 export default function Canvas(){
     const roomColor = useStorage((root) => root.roomColor);
     const layerIds = useStorage((root) => root.layerIds);
+    const[ canvasState, setState ] = useState<CanvasState>({mode: CanvasMode.None})
     const [camera, setCamera] = useState<Camera>({x:0, y:0, zoom:1})
 
     const insertLayer = useMutation((
@@ -41,6 +43,19 @@ export default function Canvas(){
             opacity: 100
             })
         }
+        else if (layerType === LayerType.Ellipse){
+             layer = new LiveObject<EllipseLayer>({
+            type : LayerType.Ellipse,
+            x: position.x,
+            y: position.y,
+            height: 100,
+            width: 100,
+            fill: {r:217 , g:217 , b:217},
+            stroke: {r:217 , g:217 , b:217},
+            opacity: 100
+            })
+        }
+
         if (layer){
             liveLayerIds.push(layerId);
             liveLayers.set(layerId, layer);
@@ -56,7 +71,7 @@ export default function Canvas(){
 const onPointerUp = useMutation(({} ,e: React.PointerEvent) => {
     const point = pointerEventToCanvasPoint( e, camera);
 
-    insertLayer(LayerType.Rectangle, point)
+    //insertLayer(LayerType.Ellipse, point)
 }, [])
 
 
@@ -76,6 +91,9 @@ const onPointerUp = useMutation(({} ,e: React.PointerEvent) => {
                 </svg>
             </div>
         </main>
+        <Toolsbar canvasState={canvasState} setCanvasState={(newState) => setState(newState)}/>
+              
+           
     </div>
 )
 }

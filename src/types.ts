@@ -29,7 +29,7 @@ export type RectangleLayer = {
 }
 
 export type EllipseLayer = {
-    type: LayerType.Rectangle,
+    type: LayerType.Ellipse,
     x: number;
     y: number;
     height: number;
@@ -71,4 +71,20 @@ export type Layer = RectangleLayer | EllipseLayer | PathLayer  | TextLayer;
 export type Point = {
     x: number;
     y:number;
+}
+
+export enum CanvasMode{
+    None,
+    Dragging,
+    Inserting
+}
+
+export type CanvasState = {
+mode: CanvasMode.None;
+} |{
+    mode: CanvasMode.Dragging;
+    point : Point | null;
+} | {
+    mode: CanvasMode.Inserting;
+    layerType: LayerType.Ellipse | LayerType.Rectangle  | LayerType.Path | LayerType.Text;
 }
