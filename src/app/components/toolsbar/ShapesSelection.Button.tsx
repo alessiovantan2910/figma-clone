@@ -43,11 +43,11 @@ return(
                     <FaRegSquare className=" h-5 w-5" />
                 )}
               {canvasState.mode === CanvasMode.Inserting && 
-              (canvasState.layerType === LayerType.Rectangle || 
-                canvasState.layerType === LayerType.Text) && (
+              canvasState.layerType === LayerType.Rectangle && (
                <FaRegSquare  className=" h-5 w-5"/>
               )}
-               {canvasState.mode !== CanvasMode.Inserting && (
+               {canvasState.mode === CanvasMode.Inserting && 
+               canvasState.layerType === LayerType.Ellipse &&(
                     <IoEllipseOutline className="h-5 w-5" />
                 )}
             </IconButton>
@@ -90,3 +90,4 @@ return(
         </div>
 )
 }
+

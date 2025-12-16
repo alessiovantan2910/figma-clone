@@ -71,7 +71,9 @@ export default function Canvas(){
 const onPointerUp = useMutation(({} ,e: React.PointerEvent) => {
     const point = pointerEventToCanvasPoint( e, camera);
 
-    //insertLayer(LayerType.Ellipse, point)
+    if(canvasState.mode === CanvasMode.Inserting){
+        setState({mode: CanvasMode.None}) //12/16 ここまで
+    }
 }, [])
 
 

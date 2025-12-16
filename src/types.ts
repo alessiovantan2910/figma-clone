@@ -83,7 +83,7 @@ export type CanvasState = {
 mode: CanvasMode.None;
 } |{
     mode: CanvasMode.Dragging;
-    point : Point | null;
+    origin : Point | null;
 } | {
     mode: CanvasMode.Inserting;
     layerType: LayerType.Ellipse | LayerType.Rectangle  | LayerType.Path | LayerType.Text;

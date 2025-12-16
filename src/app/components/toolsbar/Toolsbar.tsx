@@ -16,7 +16,7 @@ export default function Toolsbar({
         <SelectionButton 
         isActive={canvasState.mode === CanvasMode.None || canvasState.mode === CanvasMode.Dragging}  
         canvasMode={canvasState.mode} onClick={(canvasMode) => setCanvasState(canvasMode === CanvasMode.Dragging ?
-         {mode: canvasMode, point:null} : 
+         {mode: canvasMode, origin:null} : 
          {mode: canvasMode}
          )
     }  
@@ -29,7 +29,7 @@ export default function Toolsbar({
     }
     canvasState={canvasState}
     onClick={(layerType) => 
-        setCanvasState({mode: CanvasMode.Inserting, layerType: layerType})
+        setCanvasState({mode: CanvasMode.Inserting, layerType})
     } 
     />
     </div>
